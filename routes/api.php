@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\CustomerAuthController;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 Route::post('/customer/login', [CustomerAuthController::class, 'login']);
 Route::post('/customer/register', [CustomerAuthController::class, 'register']);
-Route::middleware('auth:sanctum')->post('/customer/logout', [CustomerAuthController::class, 'logout']);
+Route::middleware('auth:sanctum')
+    ->post('/customer/logout', [CustomerAuthController::class, 'logout']);
+
+Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
