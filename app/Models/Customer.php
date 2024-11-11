@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable; // Изменено для поддержки аутентификации
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Customer extends Model
+class Customer extends Authenticatable
 {
-    use HasFactory, HasApiTokens;
+    use HasApiTokens, Notifiable;
 
     protected $fillable = [
         'name', 'email', 'password',
@@ -17,4 +17,12 @@ class Customer extends Model
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * Шифрование пароля перед сохранением.
+     */
+    public function setPasswordAttribute($password)
+    {
+        $this->attributes['password'] = bcrypt($password);
+    }
 }
