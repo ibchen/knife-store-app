@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CartItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
 
 class CartController extends Controller

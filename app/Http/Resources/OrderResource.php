@@ -22,6 +22,7 @@ class OrderResource extends JsonResource
             'user_id' => $this->user_id,
             'status' => $this->status->value, // Статус заказа как строковое значение
             'total_price' => $this->total_price,
+            'created_at' => $this->created_at,
             'items' => OrderItemResource::collection($this->whenLoaded('orderItems')), // Элементы заказа
             'payment' => new PaymentResource($this->whenLoaded('payment')), // Информация об оплате
         ];

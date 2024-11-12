@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $product_id Идентификатор связанного продукта.
  * @property int $quantity Количество товара в элементе заказа.
  * @property float $price Цена товара на момент заказа.
- * @property \App\Models\Order $order Заказ, которому принадлежит элемент.
- * @property \App\Models\Product $product Продукт, связанный с элементом заказа.
+ * @property Order $order Заказ, которому принадлежит элемент.
+ * @property Product $product Продукт, связанный с элементом заказа.
  */
 class OrderItem extends Model
 {

@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property float $total_price Общая стоимость заказа.
  * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания.
  * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления.
- * @property \App\Models\User $user Пользователь, оформивший заказ.
+ * @property \App\Models\Customer $user Пользователь, оформивший заказ.
  * @property \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems Элементы заказа.
  * @property \App\Models\Payment|null $payment Связанная оплата.
  */
@@ -55,7 +55,7 @@ class Order extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Customer::class);
     }
 
     /**
