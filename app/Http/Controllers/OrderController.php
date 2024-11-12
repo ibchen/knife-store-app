@@ -21,7 +21,7 @@ class OrderController extends Controller
      */
     public function placeOrder(Request $request): JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::guard('sanctum')->user();
 
         // Получаем все товары в корзине, которые не были куплены
         $cartItems = CartItem::where('user_id', $user->id)
@@ -68,7 +68,7 @@ class OrderController extends Controller
      */
     public function index(): JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::guard('sanctum')->user();
         $orders = Order::where('user_id', $user->id)
             ->with('orderItems')
             ->get();
@@ -84,7 +84,7 @@ class OrderController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::guard('sanctum')->user();
         $order = Order::where('user_id', $user->id)
             ->with('orderItems')
             ->findOrFail($id);

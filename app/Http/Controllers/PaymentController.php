@@ -23,7 +23,7 @@ class PaymentController extends Controller
      */
     public function processPayment(Request $request): JsonResponse
     {
-        $user = Auth::user();
+        $user = Auth::guard('sanctum')->user();
         $orderId = $request->input('order_id');
         $amount = $request->input('amount');
 
