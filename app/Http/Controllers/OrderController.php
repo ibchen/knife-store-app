@@ -11,9 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\OrderResource;
 
-/**
- * Контроллер для управления заказами.
- */
 class OrderController extends Controller
 {
     /**
@@ -42,7 +39,7 @@ class OrderController extends Controller
         // Создаем запись заказа с начальным статусом
         $order = Order::create([
             'user_id' => $user->id,
-            'status' => OrderStatus::Pending->value, // Статус по умолчанию (например, "В ожидании")
+            'status' => OrderStatus::Pending->value, // Статус по умолчанию
             'total_price' => $totalPrice,
         ]);
 
@@ -57,12 +54,15 @@ class OrderController extends Controller
             $cartItem->update(['is_purchased' => true]);
         }
 
-        // Возвращаем данные о созданном заказе в виде ресурса, включая оплату
-        return response()->json(new OrderResource($order->load(['orderItems', 'payment'])));
+        // Возвращаем данные о созданном заказе в виде ресурса, включая ID заказа
+        return response()->json([
+            'order_id' => $order->id,
+            'order' => new OrderResource($order->load(['orderItems']))
+        ]);
     }
 
     /**
-     * Получает историю заказов текущего пользователя.
+     * Получает список всех заказов текущего пользователя.
      *
      * @return JsonResponse Список всех заказов пользователя.
      */
@@ -70,7 +70,7 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $orders = Order::where('user_id', $user->id)
-            ->with(['orderItems', 'payment'])
+            ->with('orderItems')
             ->get();
 
         return response()->json(OrderResource::collection($orders));
@@ -86,7 +86,7 @@ class OrderController extends Controller
     {
         $user = Auth::user();
         $order = Order::where('user_id', $user->id)
-            ->with(['orderItems', 'payment'])
+            ->with('orderItems')
             ->findOrFail($id);
 
         return response()->json(new OrderResource($order));
