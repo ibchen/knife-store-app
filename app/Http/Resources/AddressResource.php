@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CustomerResource extends JsonResource
+class AddressResource extends JsonResource
 {
     /**
      * Преобразовать ресурс в массив.
@@ -17,11 +17,12 @@ class CustomerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
-            'addresses' => AddressResource::collection($this->addresses),
+            'country' => $this->country,
+            'city' => $this->city,
+            'street' => $this->street,
+            'house' => $this->house,
+            'apartment' => $this->apartment,
+            'postal_code' => $this->postal_code,
         ];
     }
 }

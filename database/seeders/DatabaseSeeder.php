@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Customer;
 use App\Models\User;
+use App\Models\Address;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,9 +20,20 @@ class DatabaseSeeder extends Seeder
             'permissions' => '{"platform.index": true, "platform.systems.roles": true, "platform.systems.users": true, "platform.systems.attachment": true}',
         ]);
 
-        Customer::factory()->create([
+        $customer = Customer::factory()->create([
             'name' => 'Customer 1',
             'email' => 'customer_1@example.com',
+        ]);
+
+        // Создаем тестовый адрес для пользователя
+        Address::create([
+            'customer_id' => $customer->id,
+            'country' => 'Россия',
+            'city' => 'Москва',
+            'street' => 'Тверская',
+            'house' => '10',
+            'apartment' => '15',
+            'postal_code' => '123456',
         ]);
 
         // Вызов дополнительных сидеров
