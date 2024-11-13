@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -41,7 +42,7 @@ class ProductController extends Controller
      *
      * @param int $id Идентификатор продукта.
      * @return ProductResource Ресурс конкретного продукта.
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException Если продукт не найден.
+     * @throws ModelNotFoundException Если продукт не найден.
      */
     public function show(int $id): ProductResource
     {
