@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->post('/customer/logout', [CustomerAuthControl
 
 Route::middleware('auth:sanctum')->get('/customer/profile', [ProfileController::class, 'show']);
 Route::middleware('auth:sanctum')->put('/customer/profile', [ProfileController::class, 'update']);
+Route::middleware('auth:sanctum')->delete('/customer/address/{id}', [ProfileController::class, 'deleteAddress']);
 
 
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);

@@ -23,6 +23,7 @@ class AddressResource extends JsonResource
             'house' => $this->house,
             'apartment' => $this->apartment,
             'postal_code' => $this->postal_code,
+            'is_primary' => $this->is_primary, // Добавлено поле is_primary
         ];
     }
 }

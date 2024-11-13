@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('house')->nullable();
             $table->string('apartment')->nullable();
             $table->string('postal_code')->nullable();
+            $table->boolean('is_primary')->default(false); // Добавлено поле is_primary
             $table->timestamps();
         });
     }

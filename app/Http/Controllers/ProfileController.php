@@ -9,29 +9,16 @@ use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
-    /**
-     * Возвращает профиль аутентифицированного пользователя.
-     *
-     * @param Request $request
-     * @return CustomerResource
-     */
     public function show(Request $request): CustomerResource
     {
         $user = Auth::guard('sanctum')->user();
         return new CustomerResource($user);
     }
 
-    /**
-     * Обновляет профиль и адреса аутентифицированного пользователя.
-     *
-     * @param Request $request
-     * @return CustomerResource|\Illuminate\Http\JsonResponse
-     */
     public function update(Request $request)
     {
         $user = Auth::guard('sanctum')->user();
 
-        // Валидация данных профиля
         $profileData = $request->only('name', 'email');
         $validator = Validator::make($profileData, [
             'name' => 'required|string|max:255',
@@ -42,20 +29,16 @@ class ProfileController extends Controller
             return response()->json(['errors' => $validator->errors()], 422);
         }
 
-        // Обновление профиля пользователя
         $user->update($profileData);
 
-        // Обработка адресов пользователя
         $addresses = $request->input('addresses', []);
         foreach ($addresses as $addressData) {
             if (isset($addressData['id'])) {
-                // Обновляем существующий адрес
                 $address = $user->addresses()->find($addressData['id']);
                 if ($address) {
                     $address->update($addressData);
                 }
             } else {
-                // Создаём новый адрес, если ID нет
                 $validator = Validator::make($addressData, [
                     'country' => 'required|string|max:255',
                     'city' => 'required|string|max:255',
@@ -69,8 +52,26 @@ class ProfileController extends Controller
                     return response()->json(['errors' => $validator->errors()], 422);
                 }
 
-                // Создаём новый адрес, связанный с пользователем
                 $user->addresses()->create($addressData);
+            }
+        }
+
+        return new CustomerResource($user->fresh());
+    }
+
+    public function deleteAddress(Request $request, $id)
+    {
+        $user = Auth::guard('sanctum')->user();
+        $address = $user->addresses()->find($id);
+
+        if ($address) {
+            $address->delete();
+
+            if ($address->is_primary) {
+                $nextAddress = $user->addresses()->first();
+                if ($nextAddress) {
+                    $nextAddress->update(['is_primary' => true]);
+                }
             }
         }
 
