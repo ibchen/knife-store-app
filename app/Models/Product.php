@@ -17,6 +17,20 @@ class Product extends Model
     use HasFactory;
 
     /**
+     * Массово назначаемые атрибуты.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'description',
+        'price',
+        'stock',
+        'category_id',
+        'image_path',
+    ];
+
+    /**
      * Получить категорию, к которой относится продукт.
      *
      * @return BelongsTo
@@ -44,5 +58,15 @@ class Product extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    /**
+     * Возвращает полный URL к изображению продукта.
+     *
+     * @return string|null
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image_path ? asset('storage/' . $this->image_path) : null;
     }
 }
