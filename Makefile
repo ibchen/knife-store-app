@@ -15,7 +15,7 @@ app_route:
 
 
 db_migrate:
-	./vendor/bin/sail artisan migrate
+	./vendor/bin/sail artisan migrate:fresh
 
 db_rollback:
 	./vendor/bin/sail artisan migrate:rollback

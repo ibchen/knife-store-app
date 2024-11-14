@@ -19,11 +19,13 @@ use Orchid\Screen\AsSource;
  *
  * @property int $id Идентификатор заказа.
  * @property int $user_id Идентификатор пользователя.
+ * @property int|null $delivery_address_id Идентификатор адреса доставки.
  * @property OrderStatus $status Статус заказа.
  * @property float $total_price Общая стоимость заказа.
  * @property Carbon|null $created_at Дата и время создания.
  * @property Carbon|null $updated_at Дата и время последнего обновления.
  * @property Customer $user Пользователь, оформивший заказ.
+ * @property Address|null $deliveryAddress Адрес доставки.
  * @property Collection|OrderItem[] $orderItems Элементы заказа.
  * @property Payment|null $payment Связанная оплата.
  */
@@ -40,6 +42,7 @@ class Order extends Model
         'user_id',
         'status',
         'total_price',
+        'delivery_address_id', // Новое поле для адреса доставки
     ];
 
     /**
@@ -59,6 +62,16 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Получить адрес доставки для заказа.
+     *
+     * @return BelongsTo
+     */
+    public function deliveryAddress(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'delivery_address_id');
     }
 
     /**

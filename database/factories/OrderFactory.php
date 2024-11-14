@@ -3,7 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Order;
-use App\Models\User;
+use App\Models\Customer;
+use App\Models\Address;
 use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,9 +27,14 @@ class OrderFactory extends Factory
      */
     public function definition(): array
     {
+        // Создаем пользователя и один из его адресов для использования в заказе
+        $customer = Customer::factory()->create(); // Создаем пользователя
+        $address = $customer->addresses()->inRandomOrder()->first() ?? Address::factory()->for($customer)->create();
+
         return [
-            'user_id' => User::factory(), // Создает пользователя и связывает его с заказом
-            'status' => OrderStatus::Pending->value, // Статус по умолчанию (ожидание)
+            'user_id' => $customer->id,                   // Присваиваем ID пользователя
+            'delivery_address_id' => $address->id,        // Присваиваем ID адреса доставки
+            'status' => OrderStatus::Pending->value,      // Статус по умолчанию (ожидание)
             'total_price' => $this->faker->randomFloat(2, 20, 500), // Случайная общая стоимость
         ];
     }
