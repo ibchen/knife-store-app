@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\OrderStatus;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
+use Orchid\Screen\AsSource;
 
 /**
  * Class Order
@@ -18,15 +21,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $user_id Идентификатор пользователя.
  * @property OrderStatus $status Статус заказа.
  * @property float $total_price Общая стоимость заказа.
- * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания.
- * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления.
- * @property \App\Models\Customer $user Пользователь, оформивший заказ.
- * @property \Illuminate\Database\Eloquent\Collection|\App\Models\OrderItem[] $orderItems Элементы заказа.
- * @property \App\Models\Payment|null $payment Связанная оплата.
+ * @property Carbon|null $created_at Дата и время создания.
+ * @property Carbon|null $updated_at Дата и время последнего обновления.
+ * @property Customer $user Пользователь, оформивший заказ.
+ * @property Collection|OrderItem[] $orderItems Элементы заказа.
+ * @property Payment|null $payment Связанная оплата.
  */
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, AsSource;
 
     /**
      * Доступные для массового заполнения поля.
