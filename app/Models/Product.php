@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 /**
@@ -15,7 +16,7 @@ use Orchid\Screen\AsSource;
  */
 class Product extends Model
 {
-    use HasFactory, AsSource;
+    use HasFactory, AsSource, Filterable;
 
     /**
      * Массово назначаемые атрибуты.
@@ -29,6 +30,24 @@ class Product extends Model
         'stock',
         'category_id',
         'image_path',
+    ];
+
+    protected $casts = [
+        'image_paths' => 'array',
+    ];
+
+    protected array $allowedFilters = [
+        'name',
+        'price',
+        'stock',
+        'category_id',
+    ];
+
+    protected array $allowedSorts = [
+        'name',
+        'price',
+        'stock',
+        'created_at',
     ];
 
     /**
