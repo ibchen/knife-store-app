@@ -33,7 +33,7 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'image_paths' => 'array',
+        'image_path' => 'array',
     ];
 
     protected array $allowedFilters = [

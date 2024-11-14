@@ -22,7 +22,7 @@ class ProductListScreen extends Screen
     {
         return [
             'products' => Product::with('category')
-                ->defaultSort('name') // Сортировка по умолчанию
+                ->defaultSort('name')
                 ->paginate(),
         ];
     }
