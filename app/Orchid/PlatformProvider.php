@@ -34,8 +34,6 @@ class PlatformProvider extends OrchidServiceProvider
     public function menu(): array
     {
         return [
-
-
 //            Menu::make('Get Started')
 //                ->icon('bs.book')
 //                ->title('Navigation')
@@ -91,6 +89,22 @@ class PlatformProvider extends OrchidServiceProvider
 //                ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
 //                ->target('_blank')
 //                ->badge(fn () => Dashboard::version(), Color::DARK),
+
+            // Новый пункт меню для клиентов
+            Menu::make(__('Customers'))
+                ->icon('bs.person-badge')
+                ->route('platform.systems.customers')
+                ->title(__('Customer Management')),
+
+            Menu::make(__('Products'))
+                ->icon('bs.box-seam')
+                ->route('platform.systems.products')
+                ->title(__('Product Management')),
+
+            Menu::make(__('Categories'))
+                ->icon('bs.tags')
+                ->route('platform.systems.categories')
+                ->title(__('Category Management')),
         ];
     }
 

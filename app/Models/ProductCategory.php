@@ -20,6 +20,11 @@ class ProductCategory extends Model
 {
     use HasFactory, AsSource;
 
+    protected $fillable = [
+        'name',
+        'description',
+    ];
+
     /**
      * Получить продукты, относящиеся к данной категории.
      *
@@ -27,6 +32,6 @@ class ProductCategory extends Model
      */
     public function products(): HasMany
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'category_id');
     }
 }

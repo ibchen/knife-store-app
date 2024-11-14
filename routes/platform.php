@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Customer\CustomerEditScreen;
 use App\Orchid\Screens\Examples\ExampleActionsScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
 use App\Orchid\Screens\Examples\ExampleChartsScreen;
@@ -12,11 +13,16 @@ use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\Product\ProductEditScreen;
+use App\Orchid\Screens\Product\ProductListScreen;
+use App\Orchid\Screens\ProductCategory\ProductCategoryEditScreen;
+use App\Orchid\Screens\ProductCategory\ProductCategoryListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
+use App\Orchid\Screens\Customer\CustomerListScreen;
 use Illuminate\Support\Facades\Route;
 use Tabuna\Breadcrumbs\Trail;
 
@@ -102,3 +108,52 @@ Route::screen('/examples/charts', ExampleChartsScreen::class)->name('platform.ex
 Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.example.cards');
 
 //Route::screen('idea', Idea::class, 'platform.screens.idea');
+
+// Platform > System > Customers
+Route::screen('customers', CustomerListScreen::class)
+    ->name('platform.systems.customers')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.index')
+        ->push(__('Customers'), route('platform.systems.customers')));
+
+// Platform > System > Customers > Create
+Route::screen('customers/create', CustomerEditScreen::class)
+    ->name('platform.systems.customers.create')
+    ->breadcrumbs(fn (Trail $trail) => $trail
+        ->parent('platform.systems.customers')
+        ->push(__('Create Customer'), route('platform.systems.customers.create')));
+
+// Platform > System > Customers > Edit
+Route::screen('customers/{customer}/edit', CustomerEditScreen::class)
+    ->name('platform.systems.customers.edit')
+    ->breadcrumbs(fn (Trail $trail, $customer) => $trail
+        ->parent('platform.systems.customers')
+        ->push(__('Edit Customer'), route('platform.systems.customers.edit', $customer)));
+
+// Platform > System > Products > Edit
+Route::screen('products/{product}/edit', ProductEditScreen::class)
+    ->name('platform.systems.products.edit');
+
+// Platform > System > Products > Create
+Route::screen('products/create', ProductEditScreen::class)
+    ->name('platform.systems.products.create');
+
+// Platform > System > Products
+Route::screen('products', ProductListScreen::class)
+    ->name('platform.systems.products');
+
+// Platform > System > Categories
+Route::screen('categories/{category}/edit', ProductCategoryEditScreen::class)
+    ->name('platform.systems.categories.edit');
+
+// Platform > System > Categories > Create
+Route::screen('categories/create', ProductCategoryEditScreen::class)
+    ->name('platform.systems.categories.create');
+
+// Platform > System > Categories
+Route::screen('categories', ProductCategoryListScreen::class)
+    ->name('platform.systems.categories');
+
+
+
+
