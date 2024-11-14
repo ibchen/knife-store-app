@@ -90,21 +90,28 @@ class PlatformProvider extends OrchidServiceProvider
 //                ->target('_blank')
 //                ->badge(fn () => Dashboard::version(), Color::DARK),
 
-            // Новый пункт меню для клиентов
             Menu::make(__('Customers'))
                 ->icon('bs.person-badge')
                 ->route('platform.systems.customers')
                 ->title(__('Customer Management')),
+
+            Menu::make(__('Addresses'))
+                ->icon('bs.house')
+                ->route('platform.systems.addresses')
+                ->title(__('Address Management')),
+
+            Menu::make(__('Categories'))
+                ->icon('bs.tags')
+                ->route('platform.systems.categories')
+                ->title(__('Category Management')),
 
             Menu::make(__('Products'))
                 ->icon('bs.box-seam')
                 ->route('platform.systems.products')
                 ->title(__('Product Management')),
 
-            Menu::make(__('Categories'))
-                ->icon('bs.tags')
-                ->route('platform.systems.categories')
-                ->title(__('Category Management')),
+
+
         ];
     }
 

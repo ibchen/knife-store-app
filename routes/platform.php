@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Orchid\Screens\Address\AddressEditScreen;
+use App\Orchid\Screens\Address\AddressListScreen;
 use App\Orchid\Screens\Customer\CustomerEditScreen;
 use App\Orchid\Screens\Examples\ExampleActionsScreen;
 use App\Orchid\Screens\Examples\ExampleCardsScreen;
@@ -153,6 +155,18 @@ Route::screen('categories/create', ProductCategoryEditScreen::class)
 // Platform > System > Categories
 Route::screen('categories', ProductCategoryListScreen::class)
     ->name('platform.systems.categories');
+
+// Platform > System > Addresses
+Route::screen('addresses/{address}/edit', AddressEditScreen::class)
+    ->name('platform.systems.addresses.edit');
+
+// Platform > System > Addresses > Create
+Route::screen('addresses/create', AddressEditScreen::class)
+    ->name('platform.systems.addresses.create');
+
+// Platform > System > Addresses
+Route::screen('addresses', AddressListScreen::class)
+    ->name('platform.systems.addresses');
 
 
 
