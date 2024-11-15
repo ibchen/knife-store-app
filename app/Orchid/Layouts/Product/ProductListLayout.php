@@ -8,6 +8,7 @@ use App\Models\Product;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -42,7 +43,9 @@ class ProductListLayout extends Table
 
             TD::make('name', __('Name'))
                 ->sort()
+                ->filter(Input::make()->placeholder('Search by name'))
                 ->cantHide()
+                ->width('150px')
                 ->render(fn (Product $product) => $product->name),
 
             TD::make('price', __('Price'))

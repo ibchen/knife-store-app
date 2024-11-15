@@ -18,12 +18,10 @@ class ProductListScreen extends Screen
         return 'Product Management';
     }
 
-    public function query(): iterable
+    public function query(): array
     {
         return [
-            'products' => Product::with('category')
-                ->defaultSort('name')
-                ->paginate(),
+            'products' => Product::filters()->defaultSort('id')->with('category')->paginate(),
         ];
     }
 
