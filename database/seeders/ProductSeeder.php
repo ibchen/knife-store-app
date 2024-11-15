@@ -21,6 +21,6 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         // Создаем 100 продуктов, случайно присваивая им существующие категории
-        Product::factory()->count(100)->create();
+        Product::factory()->count(50)->create();
     }
 }

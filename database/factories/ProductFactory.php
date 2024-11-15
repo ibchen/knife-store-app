@@ -12,7 +12,20 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
-        // Массив с путями к локальным изображениям
+        // Список осмысленных продуктов
+        $products = [
+            ["name" => "Охотничий нож \"Тайга\"", "description" => "Прочный и надежный нож для охоты в любых погодных условиях."],
+            ["name" => "Кухонный нож \"Шеф\"", "description" => "Идеальный инструмент для профессиональной нарезки."],
+            ["name" => "Складной нож \"Универсал\"", "description" => "Компактный нож для повседневного использования."],
+            ["name" => "Нож для резьбы \"Мастер\"", "description" => "Художественный нож для резьбы по дереву."],
+            ["name" => "Коллекционный нож \"Легенда\"", "description" => "Эксклюзивный нож с уникальной гравировкой."],
+            // Добавьте еще до 50 записей
+        ];
+
+        // Выбираем случайный продукт без уникальности
+        $product = $this->faker->randomElement($products);
+
+        // Список локальных изображений
         $localImages = [
             'images/products/default_knife_1.webp',
             'images/products/default_knife_2.webp',
@@ -21,15 +34,15 @@ class ProductFactory extends Factory
             'images/products/default_knife_5.webp',
         ];
 
-        // Генерация массива изображений из от трех до пяти случайных элементов
+        // Генерация массива изображений
         $imagePaths = $this->faker->randomElements($localImages, rand(3, 5));
 
         return [
-            'name' => $this->faker->word,
-            'description' => $this->faker->paragraph,
-            'price' => $this->faker->randomFloat(2, 5, 500),
-            'stock' => $this->faker->numberBetween(1, 100),
-            'image_path' => json_encode($imagePaths), // Сохраняем массив изображений в формате JSON
+            'name' => $product['name'],
+            'description' => $product['description'],
+            'price' => $this->faker->randomFloat(2, 50, 1000),
+            'stock' => $this->faker->numberBetween(10, 200),
+            'image_path' => json_encode($imagePaths),
             'category_id' => ProductCategory::inRandomOrder()->first()->id,
         ];
     }
