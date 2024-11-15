@@ -110,6 +110,11 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.systems.products')
                 ->title(__('Product Management')),
 
+            Menu::make(__('Orders'))
+                ->icon('bs.bag')
+                ->route('platform.systems.orders')
+                ->title(__('Order Management')),
+
 
 
         ];

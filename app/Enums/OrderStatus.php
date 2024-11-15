@@ -10,4 +10,12 @@ enum OrderStatus: string
     case Shipped = 'shipped';       // Отправлен
     case Delivered = 'delivered';   // Доставлен
     case Canceled = 'canceled';     // Отменен
+
+    public static function asSelectArray(): array
+    {
+        return array_column(
+            array_map(fn(self $status) => [$status->value => ucfirst($status->name)], self::cases()),
+            0
+        );
+    }
 }

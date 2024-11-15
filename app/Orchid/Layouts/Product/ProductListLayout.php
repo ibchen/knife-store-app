@@ -18,26 +18,27 @@ class ProductListLayout extends Table
     public function columns(): array
     {
         return [
-            TD::make('image', __('Image'))
+            TD::make('image_path', __('Images'))
                 ->render(function (Product $product) {
-                    // Проверяем, что image_path является массивом
-                    if (is_array($product->image_path)) {
-                        $thumbnails = '<div style="display: flex; gap: 5px;">';
-
-                        foreach ($product->image_path as $path) {
-                            // Создаем миниатюру с отступами
-                            $thumbnails .= "<img src='" . asset('storage/' . $path) . "' style='width: 30px; height: 30px; object-fit: cover; border-radius: 3px;' />";
-                        }
-
-                        $thumbnails .= '</div>';
-                        return $thumbnails ?: '<span>No images available</span>';
-                    } else {
-                        // Сообщение, если image_path не является массивом
-                        return '<span>Image paths not loaded as array</span>';
+                    if (!is_array($product->image_path)) {
+                        $product->image_path = json_decode($product->image_path, true);
                     }
+
+                    if (!is_array($product->image_path) || empty($product->image_path)) {
+                        return '<span>No images available</span>';
+                    }
+
+                    $thumbnails = '<div style="display: flex; gap: 5px;">';
+
+                    foreach ($product->image_path as $path) {
+                        $thumbnails .= "<img src='" . asset('storage/' . $path) . "' style='width: 50px; height: 50px; object-fit: cover; border-radius: 3px;' />";
+                    }
+
+                    $thumbnails .= '</div>';
+                    return $thumbnails;
                 })
-                ->align(TD::ALIGN_CENTER)
-                ->width('100px'),
+                ->width('150px')
+                ->align(TD::ALIGN_CENTER),
 
             TD::make('name', __('Name'))
                 ->sort()
@@ -59,7 +60,7 @@ class ProductListLayout extends Table
 
             TD::make('created_at', __('Created'))
                 ->sort()
-                ->render(fn (Product $product) => $product->created_at->toDateString()),
+                ->render(fn (Product $product) => $product->created_at->format('Y-m-d H:i:s')),
 
             TD::make(__('Actions'))
                 ->align(TD::ALIGN_CENTER)

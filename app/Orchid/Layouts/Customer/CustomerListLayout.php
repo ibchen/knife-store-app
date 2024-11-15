@@ -9,7 +9,6 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Components\Cells\DateTimeSplit;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -31,13 +30,13 @@ class CustomerListLayout extends Table
                 ->sort()
                 ->cantHide()
                 ->filter(Input::make())
-                ->render(fn (Customer $customer) => $customer->name),
+                ->render(fn(Customer $customer) => $customer->name),
 
             TD::make('email', __('Email'))
                 ->sort()
                 ->cantHide()
                 ->filter(Input::make())
-                ->render(fn (Customer $customer) => ModalToggle::make($customer->email)
+                ->render(fn(Customer $customer) => ModalToggle::make($customer->email)
                     ->modal('editCustomerModal')
                     ->modalTitle($customer->name)
                     ->method('saveCustomer')
@@ -46,20 +45,20 @@ class CustomerListLayout extends Table
                     ])),
 
             TD::make('created_at', __('Created'))
-                ->usingComponent(DateTimeSplit::class)
+                ->render(fn(Customer $customer) => $customer->created_at?->format('Y-m-d H:i:s') ?? '—')
                 ->align(TD::ALIGN_RIGHT)
                 ->defaultHidden()
                 ->sort(),
 
             TD::make('updated_at', __('Last edit'))
-                ->usingComponent(DateTimeSplit::class)
+                ->render(fn(Customer $customer) => $customer->updated_at?->format('Y-m-d H:i:s') ?? '—')
                 ->align(TD::ALIGN_RIGHT)
                 ->sort(),
 
             TD::make(__('Actions'))
                 ->align(TD::ALIGN_CENTER)
                 ->width('100px')
-                ->render(fn (Customer $customer) => DropDown::make()
+                ->render(fn(Customer $customer) => DropDown::make()
                     ->icon('bs.three-dots-vertical')
                     ->list([
                         Link::make(__('Edit'))

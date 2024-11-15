@@ -14,6 +14,8 @@ use App\Orchid\Screens\Examples\ExampleGridScreen;
 use App\Orchid\Screens\Examples\ExampleLayoutsScreen;
 use App\Orchid\Screens\Examples\ExampleScreen;
 use App\Orchid\Screens\Examples\ExampleTextEditorsScreen;
+use App\Orchid\Screens\Order\OrderEditScreen;
+use App\Orchid\Screens\Order\OrderListScreen;
 use App\Orchid\Screens\PlatformScreen;
 use App\Orchid\Screens\Product\ProductEditScreen;
 use App\Orchid\Screens\Product\ProductListScreen;
@@ -46,56 +48,56 @@ Route::screen('/main', PlatformScreen::class)
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.index')
         ->push(__('Profile'), route('platform.profile')));
 
 // Platform > System > Users > User
 Route::screen('users/{user}/edit', UserEditScreen::class)
     ->name('platform.systems.users.edit')
-    ->breadcrumbs(fn (Trail $trail, $user) => $trail
+    ->breadcrumbs(fn(Trail $trail, $user) => $trail
         ->parent('platform.systems.users')
         ->push($user->name, route('platform.systems.users.edit', $user)));
 
 // Platform > System > Users > Create
 Route::screen('users/create', UserEditScreen::class)
     ->name('platform.systems.users.create')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.systems.users')
         ->push(__('Create'), route('platform.systems.users.create')));
 
 // Platform > System > Users
 Route::screen('users', UserListScreen::class)
     ->name('platform.systems.users')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.index')
         ->push(__('Users'), route('platform.systems.users')));
 
 // Platform > System > Roles > Role
 Route::screen('roles/{role}/edit', RoleEditScreen::class)
     ->name('platform.systems.roles.edit')
-    ->breadcrumbs(fn (Trail $trail, $role) => $trail
+    ->breadcrumbs(fn(Trail $trail, $role) => $trail
         ->parent('platform.systems.roles')
         ->push($role->name, route('platform.systems.roles.edit', $role)));
 
 // Platform > System > Roles > Create
 Route::screen('roles/create', RoleEditScreen::class)
     ->name('platform.systems.roles.create')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.systems.roles')
         ->push(__('Create'), route('platform.systems.roles.create')));
 
 // Platform > System > Roles
 Route::screen('roles', RoleListScreen::class)
     ->name('platform.systems.roles')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.index')
         ->push(__('Roles'), route('platform.systems.roles')));
 
 // Example...
 Route::screen('example', ExampleScreen::class)
     ->name('platform.example')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.index')
         ->push('Example Screen'));
 
@@ -114,21 +116,21 @@ Route::screen('/examples/cards', ExampleCardsScreen::class)->name('platform.exam
 // Platform > System > Customers
 Route::screen('customers', CustomerListScreen::class)
     ->name('platform.systems.customers')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.index')
         ->push(__('Customers'), route('platform.systems.customers')));
 
 // Platform > System > Customers > Create
 Route::screen('customers/create', CustomerEditScreen::class)
     ->name('platform.systems.customers.create')
-    ->breadcrumbs(fn (Trail $trail) => $trail
+    ->breadcrumbs(fn(Trail $trail) => $trail
         ->parent('platform.systems.customers')
         ->push(__('Create Customer'), route('platform.systems.customers.create')));
 
 // Platform > System > Customers > Edit
 Route::screen('customers/{customer}/edit', CustomerEditScreen::class)
     ->name('platform.systems.customers.edit')
-    ->breadcrumbs(fn (Trail $trail, $customer) => $trail
+    ->breadcrumbs(fn(Trail $trail, $customer) => $trail
         ->parent('platform.systems.customers')
         ->push(__('Edit Customer'), route('platform.systems.customers.edit', $customer)));
 
@@ -167,6 +169,18 @@ Route::screen('addresses/create', AddressEditScreen::class)
 // Platform > System > Addresses
 Route::screen('addresses', AddressListScreen::class)
     ->name('platform.systems.addresses');
+
+// Platform > System > Orders
+Route::screen('orders', OrderListScreen::class)
+    ->name('platform.systems.orders');
+
+// Platform > System > Orders > Create
+Route::screen('orders/create', OrderEditScreen::class)
+    ->name('platform.systems.orders.create');
+
+// Platform > System > Orders
+Route::screen('orders/edit/{order?}', OrderEditScreen::class)
+    ->name('platform.systems.orders.edit');
 
 
 
