@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Enums\OrderStatus;
 use App\Models\CartItem;
-use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Illuminate\Http\JsonResponse;
@@ -55,7 +54,7 @@ class OrderController extends Controller
             $cartItem->update(['is_purchased' => true]);
         }
 
-        // Возвращаем данные о созданном заказе в виде ресурса, включая ID заказа
+        // Возвращаем данные о созданном заказе в виде ресурса, включая адреса пользователя
         return response()->json([
             'order_id' => $order->id,
             'order' => new OrderResource($order->load(['orderItems.product', 'user.addresses']))
@@ -71,7 +70,7 @@ class OrderController extends Controller
     {
         $user = Auth::guard('sanctum')->user();
         $orders = Order::where('user_id', $user->id)
-            ->with(['orderItems.product', 'user.addresses'])
+            ->with(['orderItems.product', 'user.addresses']) // Подгружаем user.addresses
             ->get();
 
         return response()->json(OrderResource::collection($orders));
@@ -88,7 +87,7 @@ class OrderController extends Controller
         $user = Auth::guard('sanctum')->user();
 
         $order = Order::where('user_id', $user->id)
-            ->with(['orderItems.product', 'user.addresses']) // Подгружаем user.addresses напрямую
+            ->with(['orderItems.product', 'user.addresses']) // Подгружаем user.addresses
             ->findOrFail($id);
 
         return response()->json(new OrderResource($order));

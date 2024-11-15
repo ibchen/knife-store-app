@@ -23,9 +23,10 @@ class OrderResource extends JsonResource
             'user_id' => $this->user_id,
             'status' => $this->status->value,
             'total_price' => $this->total_price,
+            'delivery_address' => $this->delivery_address, // Поле JSON-адреса доставки
+            'addresses' => AddressResource::collection($this->user->addresses), // Адреса пользователя
             'created_at' => $this->created_at,
             'items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
-            'addresses' => $this->user->addresses ? AddressResource::collection($this->user->addresses) : [],
             'payment' => new PaymentResource($this->whenLoaded('payment')),
         ];
     }

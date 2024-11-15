@@ -26,6 +26,12 @@ class PaymentController extends Controller
         $user = Auth::guard('sanctum')->user();
         $orderId = $request->input('order_id');
         $amount = $request->input('amount');
+        $deliveryAddress = $request->input('delivery_address');
+
+        // Проверка наличия адреса доставки
+        if (!$deliveryAddress || !is_array($deliveryAddress)) {
+            return response()->json(['error' => 'Адрес доставки отсутствует или имеет некорректный формат'], 400);
+        }
 
         // Получаем заказ, который принадлежит текущему пользователю
         $order = Order::where('id', $orderId)
@@ -37,7 +43,6 @@ class PaymentController extends Controller
         if (!$order) {
             return response()->json(['error' => 'Заказ не найден или принадлежит другому пользователю'], 404);
         }
-
 
         // Проверка, была ли уже выполнена оплата
         if ($order->payment && $order->payment->status === PaymentStatus::Completed) {
@@ -54,6 +59,12 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Некорректная сумма оплаты'], 400);
         }
 
+        // Обновление заказа с адресом доставки
+        $order->update([
+            'delivery_address' => $deliveryAddress,
+            'status' => OrderStatus::Paid->value, // Устанавливаем статус на "оплачен"
+        ]);
+
         // Создание записи о платеже
         $payment = Payment::create([
             'order_id' => $order->id,
@@ -62,9 +73,10 @@ class PaymentController extends Controller
             'payment_date' => now(),
         ]);
 
-        // Обновление статуса заказа на "оплачен"
-        $order->update(['status' => OrderStatus::Paid->value]);
-
-        return response()->json(['message' => 'Оплата успешно обработана', 'payment' => $payment]);
+        return response()->json([
+            'message' => 'Оплата успешно обработана',
+            'payment' => $payment,
+            'delivery_address' => $order->delivery_address,
+        ]);
     }
 }
