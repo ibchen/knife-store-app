@@ -21,8 +21,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $customer = Customer::factory()->create([
-            'name' => 'Customer 1',
-            'email' => 'customer_1@example.com',
+            'name' => 'Alan Gordon',
+            'email' => 'gordon@example.com',
+        ]);
+
+        $customer = Customer::factory()->create([
+            'name' => 'John Dow',
+            'email' => 'dow@example.com',
         ]);
 
         // Создаем тестовый адрес для пользователя
