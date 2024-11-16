@@ -24,8 +24,8 @@ class OrderSeeder extends Seeder
      */
     public function run(): void
     {
-        // Создаем 10 клиентов
-        Customer::factory(10)->create()->each(function ($customer) {
+        // Создаем 1 клиента
+        Customer::factory(1)->create()->each(function ($customer) {
             // Для каждого клиента создаем от 1 до 3 заказов
             Order::factory(rand(1, 3))->create([
                 'user_id' => $customer->id, // Связываем заказ с клиентом

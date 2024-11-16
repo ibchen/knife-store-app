@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\CartItem;
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -32,7 +33,7 @@ class CartItemFactory extends Factory
     {
         return [
             // Создаёт нового пользователя, если он не указан
-            'user_id' => User::factory(),
+            'user_id' => Customer::factory(),
 
             // Создаёт новый продукт, если он не указан
             'product_id' => Product::factory(),

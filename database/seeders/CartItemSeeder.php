@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\CartItem;
+use App\Models\Customer;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Database\Seeder;
 
 /**
@@ -27,7 +27,7 @@ class CartItemSeeder extends Seeder
     public function run(): void
     {
         // Получаем первого пользователя из базы данных
-        $user = User::first();
+        $customer = Customer::first();
 
         // Получаем первые три продукта из базы данных
         $products = Product::take(3)->get();
@@ -35,7 +35,7 @@ class CartItemSeeder extends Seeder
         // Проходим по каждому продукту и создаем запись в корзине
         foreach ($products as $product) {
             CartItem::create([
-                'user_id' => $user->id, // ID пользователя
+                'user_id' => $customer->id, // ID пользователя
                 'product_id' => $product->id, // ID продукта
                 'quantity' => rand(1, 3), // Случайное количество от 1 до 3
                 'is_purchased' => false, // Статус покупки
