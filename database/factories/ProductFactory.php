@@ -6,12 +6,26 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
+/**
+ * Фабрика для создания моделей продуктов.
+ */
 class ProductFactory extends Factory
 {
+    /**
+     * Связанная модель фабрики.
+     *
+     * @var string
+     */
     protected $model = Product::class;
 
+    /**
+     * Определяет стандартное состояние модели.
+     *
+     * @return array<string, mixed> Ассоциативный массив с данными для создания модели.
+     */
     public function definition(): array
     {
+        // Список предопределенных продуктов с описаниями
         $products = [
             ["name" => "Охотничий нож \"Тайга\"", "description" => "Прочный и надежный нож для охоты в любых погодных условиях."],
             ["name" => "Кухонный нож \"Шеф\"", "description" => "Идеальный инструмент для профессиональной нарезки."],
@@ -45,10 +59,10 @@ class ProductFactory extends Factory
             ["name" => "Нож для рыбалки \"Шторм\"", "description" => "Прочный и водостойкий нож для рыбалки."]
         ];
 
-        // Выбираем случайный продукт без уникальности
+        // Выбор случайного продукта
         $product = $this->faker->randomElement($products);
 
-        // Список локальных изображений
+        // Список путей к изображениям
         $localImages = [
             'images/products/default_knife_1.jpg',
             'images/products/default_knife_2.jpg',
@@ -57,16 +71,16 @@ class ProductFactory extends Factory
             'images/products/default_knife_5.jpg',
         ];
 
-        // Генерация массива изображений
+        // Генерация массива изображений (3-5 случайных изображений)
         $imagePaths = $this->faker->randomElements($localImages, rand(3, 5));
 
         return [
-            'name' => $product['name'],
-            'description' => $product['description'],
-            'price' => $this->faker->randomFloat(2, 50, 1000),
-            'stock' => $this->faker->numberBetween(10, 200),
-            'image_path' => json_encode($imagePaths),
-            'category_id' => ProductCategory::inRandomOrder()->first()->id,
+            'name' => $product['name'], // Название продукта
+            'description' => $product['description'], // Описание продукта
+            'price' => $this->faker->randomFloat(2, 50, 1000), // Цена (от 50 до 1000)
+            'stock' => $this->faker->numberBetween(10, 200), // Количество на складе (от 10 до 200)
+            'image_path' => json_encode($imagePaths), // Пути к изображениям в формате JSON
+            'category_id' => ProductCategory::inRandomOrder()->first()->id, // Случайная категория
         ];
     }
 }

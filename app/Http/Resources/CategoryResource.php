@@ -5,13 +5,16 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Ресурс для представления категории.
+ */
 class CategoryResource extends JsonResource
 {
     /**
-     * Преобразовать ресурс в массив.
+     * Преобразует ресурс категории в массив.
      *
-     * @param  Request  $request
-     * @return array<string, mixed>
+     * @param  Request  $request Запрос пользователя.
+     * @return array<string, mixed> Ассоциативный массив с данными категории.
      */
     public function toArray($request): array
     {

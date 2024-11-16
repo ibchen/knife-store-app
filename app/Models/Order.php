@@ -13,17 +13,17 @@ use Illuminate\Support\Carbon;
 use Orchid\Screen\AsSource;
 
 /**
- * Class Order
+ * Класс Order
  *
  * Представляет заказ пользователя в системе.
  *
- * @property int $id Идентификатор заказа.
- * @property int $user_id Идентификатор пользователя.
+ * @property int $id Уникальный идентификатор заказа.
+ * @property int $user_id Идентификатор пользователя, который оформил заказ.
  * @property array|null $delivery_address JSON-адрес доставки.
- * @property OrderStatus $status Статус заказа.
+ * @property OrderStatus $status Текущий статус заказа.
  * @property float $total_price Общая стоимость заказа.
- * @property Carbon|null $created_at Дата и время создания.
- * @property Carbon|null $updated_at Дата и время последнего обновления.
+ * @property Carbon|null $created_at Дата и время создания заказа.
+ * @property Carbon|null $updated_at Дата и время последнего обновления заказа.
  * @property Customer $user Пользователь, оформивший заказ.
  * @property Collection|OrderItem[] $orderItems Элементы заказа.
  * @property Payment|null $payment Связанная оплата.
@@ -41,7 +41,7 @@ class Order extends Model
         'user_id',
         'status',
         'total_price',
-        'delivery_address', // Поле для JSON-адреса доставки
+        'delivery_address', // Поле для JSON-адреса доставки.
     ];
 
     /**
@@ -50,8 +50,8 @@ class Order extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'status' => OrderStatus::class,
-        'delivery_address' => 'array', // Преобразование delivery_address в массив
+        'status' => OrderStatus::class, // Преобразование статуса заказа в enum.
+        'delivery_address' => 'array', // Преобразование delivery_address в массив.
     ];
 
     /**

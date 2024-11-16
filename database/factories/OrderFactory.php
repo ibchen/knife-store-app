@@ -8,41 +8,46 @@ use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * Фабрика для создания моделей заказа.
+ * Фабрика для создания моделей заказа (Order).
  */
 class OrderFactory extends Factory
 {
     /**
-     * Определяет модель, для которой создается фабрика.
+     * Связанная модель фабрики.
      *
      * @var string
      */
     protected $model = Order::class;
 
     /**
-     * Определяет состояние по умолчанию для модели заказа.
+     * Определяет значения по умолчанию для модели заказа.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> Массив данных для модели Order.
      */
     public function definition(): array
     {
-        $customer = Customer::factory()->create(); // Создаем пользователя
-
         // Генерация случайного адреса доставки в формате JSON
         $deliveryAddress = [
             'country' => $this->faker->country,
             'city' => $this->faker->city,
             'street' => $this->faker->streetName,
             'house' => $this->faker->buildingNumber,
-            'apartment' => $this->faker->optional()->randomNumber(2),
+            'apartment' => $this->faker->optional()->numerify('##'),
             'postal_code' => $this->faker->postcode,
         ];
 
         return [
-            'user_id' => $customer->id,                   // Присваиваем ID пользователя
-            'delivery_address' => $deliveryAddress,       // JSON-адрес доставки
-            'status' => OrderStatus::Pending->value,      // Статус по умолчанию (ожидание)
-            'total_price' => $this->faker->randomFloat(2, 20, 500), // Случайная общая стоимость
+            // Связанный пользователь (создаётся через CustomerFactory)
+            'user_id' => Customer::factory(),
+
+            // Адрес доставки
+            'delivery_address' => $deliveryAddress,
+
+            // Статус заказа (по умолчанию - "ожидание")
+            'status' => OrderStatus::Pending->value,
+
+            // Общая стоимость заказа (случайное значение от 20 до 500)
+            'total_price' => $this->faker->randomFloat(2, 20, 500),
         ];
     }
 }

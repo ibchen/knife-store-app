@@ -1,9 +1,13 @@
-<?php namespace Database\Factories;
+<?php
+
+namespace Database\Factories;
 
 use App\Models\ProductCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
+ * Фабрика для создания моделей категорий продуктов.
+ *
  * @extends Factory<ProductCategory>
  */
 class ProductCategoryFactory extends Factory
@@ -18,10 +22,11 @@ class ProductCategoryFactory extends Factory
     /**
      * Определить стандартное состояние модели.
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed> Ассоциативный массив с данными для создания модели.
      */
     public function definition(): array
     {
+        // Массив предопределенных категорий
         $categories = [
             ["name" => "Охотничьи ножи", "description" => "Ножи для охоты и рыбалки"],
             ["name" => "Кухонные ножи", "description" => "Ножи для приготовления пищи"],
@@ -37,14 +42,15 @@ class ProductCategoryFactory extends Factory
             ["name" => "Ножи для выживания", "description" => "Ножи для выживания и автономной жизни"],
             ["name" => "Ножи для резьбы по дереву", "description" => "Ножи для резьбы по дереву и рукоделия"],
             ["name" => "Точилки и аксессуары для заточки", "description" => "Точилки и аксессуары для заточки ножей"],
-            ["name" => "Коллекционные ножи", "description" => "Коллекционные ножи и ножи-памятники"]
+            ["name" => "Коллекционные ножи", "description" => "Коллекционные ножи и ножи-памятники"],
         ];
 
+        // Выбор уникальной категории из массива
         $category = $this->faker->unique()->randomElement($categories);
 
         return [
-            'name' => $category['name'],
-            'description' => $category['description'],
+            'name' => $category['name'], // Название категории
+            'description' => $category['description'], // Описание категории
         ];
     }
 }

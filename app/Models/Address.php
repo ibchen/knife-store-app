@@ -6,18 +6,43 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Orchid\Screen\AsSource;
 
+/**
+ * Модель для работы с адресами клиентов.
+ */
 class Address extends Model
 {
     use HasFactory, AsSource;
 
+    /**
+     * Заполняемые поля модели.
+     *
+     * @var array<string>
+     */
     protected $fillable = [
-        'customer_id', 'country', 'city', 'street', 'house', 'apartment', 'postal_code', 'is_primary',
+        'customer_id',
+        'country',
+        'city',
+        'street',
+        'house',
+        'apartment',
+        'postal_code',
+        'is_primary',
     ];
 
+    /**
+     * Преобразование типов атрибутов.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'is_primary' => 'boolean',
     ];
 
+    /**
+     * Определяет связь с клиентом.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function customer()
     {
         return $this->belongsTo(Customer::class);
@@ -25,6 +50,8 @@ class Address extends Model
 
     /**
      * Устанавливает текущий адрес как основной.
+     *
+     * Если текущий адрес уже является основным, действие игнорируется.
      */
     public function setAsPrimary()
     {
@@ -40,8 +67,7 @@ class Address extends Model
     }
 
     /**
-     * Автоматически устанавливает первый адрес как основной при создании,
-     * и обновляет основной адрес, если основной был удален.
+     * Автоматические действия при определенных событиях модели.
      */
     protected static function booted()
     {

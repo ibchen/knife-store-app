@@ -12,9 +12,22 @@ use Orchid\Filters\Types\Like;
 use Orchid\Screen\AsSource;
 
 /**
- * Class Product
+ * Класс Product
  *
  * Представляет продукт в интернет-магазине.
+ *
+ * @property int $id Уникальный идентификатор продукта.
+ * @property string $name Название продукта.
+ * @property string|null $description Описание продукта.
+ * @property float $price Цена продукта.
+ * @property int $stock Количество доступного товара на складе.
+ * @property int|null $category_id Идентификатор категории продукта.
+ * @property array|string|null $image_path Путь или массив путей к изображениям продукта.
+ * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания продукта.
+ * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления продукта.
+ * @property ProductCategory|null $category Категория продукта.
+ * @property \Illuminate\Database\Eloquent\Collection|CartItem[] $cartItems Элементы корзины, связанные с продуктом.
+ * @property \Illuminate\Database\Eloquent\Collection|OrderItem[] $orderItems Элементы заказа, связанные с продуктом.
  */
 class Product extends Model
 {
@@ -34,10 +47,20 @@ class Product extends Model
         'image_path',
     ];
 
+    /**
+     * Преобразование атрибутов в определенные типы.
+     *
+     * @var array<string, string>
+     */
     protected $casts = [
         'image_path' => 'array',
     ];
 
+    /**
+     * Доступные фильтры для модели.
+     *
+     * @var array<string, string>
+     */
     protected array $allowedFilters = [
         'name' => Like::class,
         'price' => Like::class,
@@ -45,6 +68,11 @@ class Product extends Model
         'created_at' => Like::class,
     ];
 
+    /**
+     * Доступные сортировки для модели.
+     *
+     * @var array<int, string>
+     */
     protected array $allowedSorts = [
         'name',
         'price',

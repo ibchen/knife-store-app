@@ -5,13 +5,16 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Ресурс для представления клиента.
+ */
 class CustomerResource extends JsonResource
 {
     /**
-     * Преобразовать ресурс в массив.
+     * Преобразует ресурс клиента в массив.
      *
-     * @param  Request  $request
-     * @return array<string, mixed>
+     * @param  Request  $request Запрос пользователя.
+     * @return array<string, mixed> Ассоциативный массив с данными клиента.
      */
     public function toArray($request): array
     {
@@ -19,9 +22,9 @@ class CustomerResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
-            'addresses' => AddressResource::collection($this->addresses),
+            'created_at' => $this->created_at->toDateTimeString(), // Дата и время создания.
+            'updated_at' => $this->updated_at->toDateTimeString(), // Дата и время последнего обновления.
+            'addresses' => AddressResource::collection($this->addresses), // Коллекция адресов клиента.
         ];
     }
 }

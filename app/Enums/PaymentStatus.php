@@ -2,6 +2,9 @@
 
 namespace App\Enums;
 
+/**
+ * Перечисление статусов платежей
+ */
 enum PaymentStatus: string
 {
     case Pending = 'pending';       // Ожидает обработки

@@ -3,23 +3,28 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
-use App\Models\ProductCategory;
 use Illuminate\Database\Seeder;
 
 /**
  * Class ProductSeeder
  *
- * Заполняет базу данных начальными категориями и продуктами.
+ * Сидер для заполнения базы данных начальными продуктами.
  */
 class ProductSeeder extends Seeder
 {
     /**
-     * Запустить заполнение базы данных продуктами.
+     * Выполняет заполнение базы данных начальными продуктами.
+     *
+     * Метод создает 20 случайных продуктов с использованием фабрики `ProductFactory`.
+     * Категории продуктов предварительно должны быть созданы для корректного распределения.
      *
      * @return void
      */
     public function run(): void
     {
-        Product::factory()->count(20)->create();
+        // Создание 20 случайных продуктов
+        Product::factory()
+            ->count(20) // Указываем количество создаваемых продуктов
+            ->create(); // Выполняем создание записей в базе данных
     }
 }

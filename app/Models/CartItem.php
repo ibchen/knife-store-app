@@ -8,17 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Orchid\Screen\AsSource;
 
 /**
- * Class CartItem
+ * Класс CartItem
  *
  * Представляет элемент в корзине пользователя.
  *
- * @property int $id
- * @property int $user_id
- * @property int $product_id
- * @property int $quantity
- * @property bool $is_purchased
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $id Идентификатор элемента корзины.
+ * @property int $user_id Идентификатор пользователя, которому принадлежит элемент.
+ * @property int $product_id Идентификатор продукта.
+ * @property int $quantity Количество продукта.
+ * @property bool $is_purchased Указывает, был ли элемент куплен.
+ * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания элемента.
+ * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления элемента.
  */
 class CartItem extends Model
 {

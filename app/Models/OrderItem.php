@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Orchid\Screen\AsSource;
 
 /**
- * Class OrderItem
+ * Класс OrderItem
  *
  * Представляет элемент в заказе.
  *
- * @property int $id Идентификатор элемента заказа.
+ * @property int $id Уникальный идентификатор элемента заказа.
  * @property int $order_id Идентификатор связанного заказа.
  * @property int $product_id Идентификатор связанного продукта.
  * @property int $quantity Количество товара в элементе заказа.
  * @property float $price Цена товара на момент заказа.
+ * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания элемента.
+ * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления элемента.
  * @property Order $order Заказ, которому принадлежит элемент.
  * @property Product $product Продукт, связанный с элементом заказа.
  */
@@ -33,7 +35,7 @@ class OrderItem extends Model
         'order_id',
         'product_id',
         'quantity',
-        'price'
+        'price',
     ];
 
     /**

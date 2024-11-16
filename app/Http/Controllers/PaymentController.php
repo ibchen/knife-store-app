@@ -24,32 +24,30 @@ class PaymentController extends Controller
     public function processPayment(Request $request): JsonResponse
     {
         $user = Auth::guard('sanctum')->user();
-        $orderId = $request->input('order_id');
-        $amount = $request->input('amount');
-        $deliveryAddress = $request->input('delivery_address');
 
-        // Проверка наличия адреса доставки
-        if (!$deliveryAddress || !is_array($deliveryAddress)) {
-            return response()->json(['error' => 'Адрес доставки отсутствует или имеет некорректный формат'], 400);
-        }
+        // Валидация входных данных
+        $validatedData = $request->validate([
+            'order_id' => 'required|integer|exists:orders,id',
+            'amount' => 'required|numeric|min:0',
+            'delivery_address' => 'required|array',
+        ]);
+
+        $orderId = $validatedData['order_id'];
+        $amount = $validatedData['amount'];
+        $deliveryAddress = $validatedData['delivery_address'];
 
         // Получаем заказ, который принадлежит текущему пользователю
         $order = Order::where('id', $orderId)
             ->where('user_id', $user->id)
-            ->with('payment')
-            ->first();
+            ->with(['payment', 'orderItems.product'])
+            ->firstOrFail();
 
-        // Проверка существования заказа
-        if (!$order) {
-            return response()->json(['error' => 'Заказ не найден или принадлежит другому пользователю'], 404);
-        }
-
-        // Проверка, была ли уже выполнена оплата
+        // Проверка: заказ уже оплачен
         if ($order->payment && $order->payment->status === PaymentStatus::Completed) {
             return response()->json(['error' => 'Заказ уже был оплачен'], 400);
         }
 
-        // Проверка статуса заказа
+        // Проверка: статус заказа
         if ($order->status === OrderStatus::Paid->value) {
             return response()->json(['error' => 'Заказ уже был оплачен'], 400);
         }
@@ -57,6 +55,20 @@ class PaymentController extends Controller
         // Проверка суммы оплаты
         if ($amount != $order->total_price) {
             return response()->json(['error' => 'Некорректная сумма оплаты'], 400);
+        }
+
+        // Обновление остатков товаров на складе
+        foreach ($order->orderItems as $orderItem) {
+            $product = $orderItem->product;
+
+            if ($product->stock < $orderItem->quantity) {
+                return response()->json([
+                    'error' => "Недостаточно товара \"{$product->name}\" на складе"
+                ], 400);
+            }
+
+            $product->stock -= $orderItem->quantity;
+            $product->save();
         }
 
         // Обновление заказа с адресом доставки
@@ -73,6 +85,7 @@ class PaymentController extends Controller
             'payment_date' => now(),
         ]);
 
+        // Возврат успешного ответа
         return response()->json([
             'message' => 'Оплата успешно обработана',
             'payment' => $payment,

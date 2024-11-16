@@ -9,9 +9,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Orchid\Screen\AsSource;
 
 /**
- * Class Payment
+ * Класс Payment
  *
  * Представляет оплату для заказа.
+ *
+ * @property int $id Уникальный идентификатор записи оплаты.
+ * @property int $order_id Идентификатор связанного заказа.
+ * @property float $amount Сумма оплаты.
+ * @property PaymentStatus $status Статус оплаты.
+ * @property \Illuminate\Support\Carbon|null $payment_date Дата и время оплаты.
+ * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания записи.
+ * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления записи.
+ * @property Order $order Заказ, связанный с оплатой.
  */
 class Payment extends Model
 {
@@ -35,10 +44,9 @@ class Payment extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'status' => PaymentStatus::class,
+        'status' => PaymentStatus::class, // Преобразование статуса оплаты в enum.
+        'payment_date' => 'datetime', // Преобразование даты оплаты в объект Carbon.
     ];
-
-
 
     /**
      * Получить заказ, связанный с оплатой.

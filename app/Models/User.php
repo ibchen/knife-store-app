@@ -7,12 +7,26 @@ use Orchid\Filters\Types\Where;
 use Orchid\Filters\Types\WhereDateStartEnd;
 use Orchid\Platform\Models\User as Authenticatable;
 
+/**
+ * Класс User
+ *
+ * Представляет пользователя в системе.
+ *
+ * @property int $id Уникальный идентификатор пользователя.
+ * @property string $name Имя пользователя.
+ * @property string $email Электронная почта пользователя.
+ * @property string|null $password Хэшированный пароль пользователя.
+ * @property \Illuminate\Support\Carbon|null $email_verified_at Дата и время подтверждения электронной почты.
+ * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания пользователя.
+ * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления пользователя.
+ * @property array|null $permissions Разрешения пользователя.
+ */
 class User extends Authenticatable
 {
     /**
-     * The attributes that are mass assignable.
+     * Атрибуты, доступные для массового заполнения.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
@@ -21,9 +35,9 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes excluded from the model's JSON form.
+     * Атрибуты, скрытые из JSON-представления модели.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -32,32 +46,32 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast to native types.
+     * Атрибуты, которые должны быть приведены к определенным типам.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $casts = [
-        'permissions'          => 'array',
-        'email_verified_at'    => 'datetime',
+        'permissions' => 'array',
+        'email_verified_at' => 'datetime',
     ];
 
     /**
-     * The attributes for which you can use filters in url.
+     * Атрибуты, по которым можно использовать фильтры в URL.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected $allowedFilters = [
-           'id'         => Where::class,
-           'name'       => Like::class,
-           'email'      => Like::class,
-           'updated_at' => WhereDateStartEnd::class,
-           'created_at' => WhereDateStartEnd::class,
+        'id' => Where::class,
+        'name' => Like::class,
+        'email' => Like::class,
+        'updated_at' => WhereDateStartEnd::class,
+        'created_at' => WhereDateStartEnd::class,
     ];
 
     /**
-     * The attributes for which can use sort in url.
+     * Атрибуты, по которым можно использовать сортировку в URL.
      *
-     * @var array
+     * @var array<int, string>
      */
     protected $allowedSorts = [
         'id',

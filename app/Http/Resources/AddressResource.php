@@ -11,10 +11,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class AddressResource extends JsonResource
 {
     /**
-     * Преобразует ресурс в массив.
+     * Преобразует ресурс адреса в массив.
      *
-     * @param  Request  $request
-     * @return array<string, mixed>
+     * @param  Request  $request Запрос пользователя.
+     * @return array<string, mixed> Ассоциативный массив с данными адреса.
      */
     public function toArray($request): array
     {
@@ -26,7 +26,7 @@ class AddressResource extends JsonResource
             'house' => $this->house,
             'apartment' => $this->apartment,
             'postal_code' => $this->postal_code,
-            'is_primary' => $this->is_primary, // Поле для основного адреса
+            'is_primary' => $this->is_primary, // Является ли адрес основным.
         ];
     }
 }
