@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Orchid\Attachment\Attachable;
+use Illuminate\Support\Carbon;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Filters\Filterable;
 use Orchid\Filters\Types\Like;
 use Orchid\Screen\AsSource;
@@ -22,16 +24,17 @@ use Orchid\Screen\AsSource;
  * @property float $price Цена продукта.
  * @property int $stock Количество доступного товара на складе.
  * @property int|null $category_id Идентификатор категории продукта.
- * @property array|string|null $image_path Путь или массив путей к изображениям продукта.
- * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания продукта.
- * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления продукта.
+ * @property array|string|null $image_paths Массив идентификаторов изображений продукта.
+ * @property array|null $image_urls Массив URL изображений продукта.
+ * @property Carbon|null $created_at Дата и время создания продукта.
+ * @property Carbon|null $updated_at Дата и время последнего обновления продукта.
  * @property ProductCategory|null $category Категория продукта.
- * @property \Illuminate\Database\Eloquent\Collection|CartItem[] $cartItems Элементы корзины, связанные с продуктом.
- * @property \Illuminate\Database\Eloquent\Collection|OrderItem[] $orderItems Элементы заказа, связанные с продуктом.
+ * @property Collection|CartItem[] $cartItems Элементы корзины, связанные с продуктом.
+ * @property Collection|OrderItem[] $orderItems Элементы заказа, связанные с продуктом.
  */
 class Product extends Model
 {
-    use HasFactory, AsSource, Filterable, Attachable;
+    use HasFactory, AsSource, Filterable;
 
     /**
      * Массово назначаемые атрибуты.
@@ -44,7 +47,7 @@ class Product extends Model
         'price',
         'stock',
         'category_id',
-        'image_path',
+        'image_paths',
     ];
 
     /**
@@ -53,7 +56,7 @@ class Product extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'image_path' => 'array',
+        'image_paths' => 'array',
     ];
 
     /**
@@ -111,12 +114,19 @@ class Product extends Model
     }
 
     /**
-     * Возвращает полный URL к изображению продукта.
+     * Возвращает массив URL изображений для продукта.
      *
-     * @return string|null
+     * @return array|null
      */
-    public function getImageUrlAttribute(): ?string
+    public function getImageUrlsAttribute(): ?array
     {
-        return $this->image_path ? asset('storage/' . $this->image_path) : null;
+        if (!$this->image_paths) {
+            return null;
+        }
+
+        return Attachment::whereIn('id', $this->image_paths)
+            ->get()
+            ->map(fn($attachment) => asset('storage/' . $attachment->path . $attachment->name . '.' . $attachment->extension))
+            ->toArray();
     }
 }

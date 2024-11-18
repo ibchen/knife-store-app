@@ -5,6 +5,8 @@ namespace Database\Factories;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
+use Orchid\Attachment\Models\Attachment;
 
 /**
  * Фабрика для создания моделей продуктов.
@@ -71,15 +73,44 @@ class ProductFactory extends Factory
             'images/products/default_knife_5.jpg',
         ];
 
-        // Генерация массива изображений (3-5 случайных изображений)
-        $imagePaths = $this->faker->randomElements($localImages, rand(3, 5));
+        // Генерация 3–5 случайных изображений
+        $randomImages = $this->faker->randomElements($localImages, rand(3, 5));
+
+        // Создание записей в таблице attachments и получение их идентификаторов
+        $attachmentIds = collect($randomImages)->map(function ($imagePath) {
+            // Проверяем, существует ли файл
+            if (!Storage::exists($imagePath)) {
+                throw new \Exception("File {$imagePath} does not exist.");
+            }
+
+            // Генерация уникального имени файла
+            $newFileName = uniqid() . '_' . basename($imagePath);
+            $storageFolder = 'attachments/';
+
+            // Копируем файл в публичную директорию
+            Storage::disk('public')->put($storageFolder . $newFileName, Storage::get($imagePath));
+
+            // Создание записи в таблице attachments
+            $attachment = Attachment::create([
+                'name' => pathinfo($newFileName, PATHINFO_FILENAME), // Имя файла без расширения
+                'original_name' => basename($imagePath), // Исходное имя файла
+                'mime' => Storage::mimeType($imagePath), // MIME-тип файла
+                'extension' => pathinfo($newFileName, PATHINFO_EXTENSION), // Расширение файла
+                'size' => Storage::size($imagePath), // Размер файла
+                'path' => $storageFolder, // Только папка, где файл находится
+                'hash' => hash_file('sha256', storage_path('app/public/' . $storageFolder . $newFileName)), // Хеш содержимого файла
+                'user_id' => auth()->id() ?? 1, // ID пользователя или значение по умолчанию
+            ]);
+
+            return $attachment->id;
+        });
 
         return [
             'name' => $product['name'], // Название продукта
             'description' => $product['description'], // Описание продукта
             'price' => $this->faker->randomFloat(2, 50, 1000), // Цена (от 50 до 1000)
             'stock' => $this->faker->numberBetween(10, 200), // Количество на складе (от 10 до 200)
-            'image_path' => json_encode($imagePaths), // Пути к изображениям в формате JSON
+            'image_paths' => $attachmentIds->toArray(), // Идентификаторы изображений
             'category_id' => ProductCategory::inRandomOrder()->first()->id, // Случайная категория
         ];
     }

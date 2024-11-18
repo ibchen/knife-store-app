@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Orchid\Layouts\Product;
 
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\Button;
@@ -35,25 +37,48 @@ class ProductListLayout extends Table
     {
         return [
             // Колонка с изображениями продукта
-            TD::make('image_path', __('Images'))
+            TD::make('image_paths', __('Images'))
                 ->render(function (Product $product) {
-                    $images = is_array($product->image_path) ? $product->image_path : json_decode($product->image_path, true);
+                    // Преобразуем поле image_paths в массив идентификаторов
+                    $imageIds = is_array($product->image_paths)
+                        ? $product->image_paths
+                        : json_decode($product->image_paths, true);
 
-                    if (empty($images)) {
+                    if (empty($imageIds) || !is_array($imageIds)) {
                         return '<span>' . __('No images available') . '</span>';
                     }
 
-                    $thumbnails = '<div style="display: flex; gap: 5px;">';
+                    // Извлекаем изображения из таблицы attachments
+                    $images = Attachment::whereIn('id', $imageIds)->get();
 
-                    foreach ($images as $path) {
-                        $thumbnails .= "<img src='" . asset('storage/' . $path) . "' style='width: 50px; height: 50px; object-fit: cover; border-radius: 3px;' />";
+                    if ($images->isEmpty()) {
+                        return '<span>' . __('No images available') . '</span>';
+                    }
+
+                    // Генерируем HTML для миниатюр
+                    $thumbnails = '<div style="display: flex; gap: 5px; align-items: center;">';
+
+                    foreach ($images as $image) {
+                        // Если имя файла не содержит расширение, добавляем его
+                        $fileName = $image->name;
+                        if (!str_contains($fileName, '.')) {
+                            $fileName .= '.' . $image->extension;
+                        }
+
+                        // Генерация публичного URL к файлу
+                        $imageUrl = asset('storage/' . ltrim($image->path, '/') . $fileName);
+
+                        // Добавляем миниатюру
+                        $thumbnails .= "<img src='{$imageUrl}' alt='Product Image' style='width: 50px; height: 50px; object-fit: cover; border-radius: 3px;'>";
                     }
 
                     $thumbnails .= '</div>';
+
                     return $thumbnails;
                 })
                 ->width('150px')
                 ->align(TD::ALIGN_CENTER),
+
 
             // Колонка с именем продукта
             TD::make('name', __('Name'))

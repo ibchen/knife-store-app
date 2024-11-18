@@ -24,7 +24,7 @@ class ProductResource extends JsonResource
             'description' => $this->description, // Описание продукта.
             'price' => $this->price, // Цена продукта.
             'stock' => $this->stock, // Количество продукта на складе.
-            'image_url' => $this->image_url, // URL изображения продукта.
+            'image_urls' => $this->image_urls, // Массив URL изображений.
             'category' => new ProductCategoryResource($this->whenLoaded('category')), // Категория продукта.
         ];
     }
