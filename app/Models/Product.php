@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 use Orchid\Attachment\Attachable;
 use Orchid\Filters\Filterable;
 use Orchid\Filters\Types\Like;
@@ -22,12 +24,12 @@ use Orchid\Screen\AsSource;
  * @property float $price Цена продукта.
  * @property int $stock Количество доступного товара на складе.
  * @property int|null $category_id Идентификатор категории продукта.
- * @property array|string|null $image_path Путь или массив путей к изображениям продукта.
- * @property \Illuminate\Support\Carbon|null $created_at Дата и время создания продукта.
- * @property \Illuminate\Support\Carbon|null $updated_at Дата и время последнего обновления продукта.
+ * @property array|string|null $image_paths Путь или массив путей к изображениям продукта.
+ * @property Carbon|null $created_at Дата и время создания продукта.
+ * @property Carbon|null $updated_at Дата и время последнего обновления продукта.
  * @property ProductCategory|null $category Категория продукта.
- * @property \Illuminate\Database\Eloquent\Collection|CartItem[] $cartItems Элементы корзины, связанные с продуктом.
- * @property \Illuminate\Database\Eloquent\Collection|OrderItem[] $orderItems Элементы заказа, связанные с продуктом.
+ * @property Collection|CartItem[] $cartItems Элементы корзины, связанные с продуктом.
+ * @property Collection|OrderItem[] $orderItems Элементы заказа, связанные с продуктом.
  */
 class Product extends Model
 {
@@ -44,7 +46,7 @@ class Product extends Model
         'price',
         'stock',
         'category_id',
-        'image_path',
+        'image_paths',
     ];
 
     /**
@@ -53,7 +55,7 @@ class Product extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'image_path' => 'array',
+        'image_paths' => 'array',
     ];
 
     /**
@@ -117,6 +119,6 @@ class Product extends Model
      */
     public function getImageUrlAttribute(): ?string
     {
-        return $this->image_path ? asset('storage/' . $this->image_path) : null;
+        return $this->image_paths ? asset('storage/' . $this->image_paths) : null;
     }
 }

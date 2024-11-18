@@ -10,11 +10,15 @@ app_clean:
 	./vendor/bin/sail artisan route:clear
 	./vendor/bin/sail artisan view:clear
 
+clear_log:
+	echo "" > storage/logs/laravel.log
+
+
 app_route:
 	./vendor/bin/sail artisan route:list
 
 
-db_migrate:
+db_migrate_fresh:
 	./vendor/bin/sail artisan migrate:fresh
 
 db_rollback:
@@ -36,3 +40,4 @@ test_cart:
 
 test_order:
 	./vendor/bin/sail artisan test --filter OrderControllerTest
+
