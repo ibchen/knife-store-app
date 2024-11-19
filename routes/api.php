@@ -24,12 +24,6 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 // Маршруты для аутентификации клиентов
 Route::post('/customer/login', [CustomerAuthController::class, 'login']); // Логин клиента
 Route::post('/customer/register', [CustomerAuthController::class, 'register']); // Регистрация клиента
-Route::middleware('auth:sanctum')->post('/customer/logout', [CustomerAuthController::class, 'logout']); // Логаут клиента
-
-// Маршруты для профиля клиента
-Route::middleware('auth:sanctum')->get('/customer/profile', [ProfileController::class, 'show']); // Просмотр профиля клиента
-Route::middleware('auth:sanctum')->put('/customer/profile', [ProfileController::class, 'update']); // Обновление профиля клиента
-Route::middleware('auth:sanctum')->delete('/customer/address/{id}', [ProfileController::class, 'deleteAddress']); // Удаление адреса клиента
 
 // Маршрут для получения CSRF Cookie (используется для SPA)
 Route::get('/sanctum/csrf-cookie', [CsrfCookieController::class, 'show']);
@@ -43,6 +37,11 @@ Route::get('/categories', [CategoryController::class, 'index']); // Получе
 
 // Группа маршрутов для авторизованных пользователей
 Route::middleware('auth:sanctum')->group(function () {
+    // Маршруты для профиля клиента
+    Route::get('/customer/profile', [ProfileController::class, 'show']); // Просмотр профиля клиента
+    Route::put('/customer/profile', [ProfileController::class, 'update']); // Обновление профиля клиента
+    Route::delete('/customer/address/{id}', [ProfileController::class, 'deleteAddress']); // Удаление адреса клиента
+
     // Маршруты для корзины
     Route::get('/cart', [CartController::class, 'index']); // Просмотр содержимого корзины
     Route::post('/cart/add', [CartController::class, 'add']); // Добавление товара в корзину
@@ -56,4 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Маршрут для обработки платежей
     Route::post('/payment/process', [PaymentController::class, 'processPayment']); // Обработка платежа за заказ
+
+    // Логаут клиента
+    Route::post('/customer/logout', [CustomerAuthController::class, 'logout']);
 });
